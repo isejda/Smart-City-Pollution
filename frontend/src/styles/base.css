@@ -1,0 +1,51 @@
+/* ============================================================
+   Global base — shared by both portals.
+   Design tokens live in colors.css / typography.css / spacing.css.
+   ============================================================ */
+@import './colors.css';
+@import './typography.css';
+@import './spacing.css';
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--surface-page);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: var(--fs-sm);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+#app { min-height: 100vh; }
+
+h1, h2, h3, h4 { margin: 0; }
+p { margin: 0; text-wrap: pretty; }
+button { font-family: var(--font-body); }
+a { color: var(--teal-500); text-decoration: none; }
+a:hover { color: var(--teal-400); }
+
+:focus-visible { outline: 2px solid var(--teal-400); outline-offset: 2px; }
+
+/* soft scrollbar used across cards & panels */
+.sc::-webkit-scrollbar { width: 9px; height: 9px; }
+.sc::-webkit-scrollbar-thumb {
+  background: var(--neutral-200);
+  border-radius: var(--radius-sm);
+  border: 3px solid transparent;
+  background-clip: padding-box;
+}
+
+/* Leaflet base theming (both portals soften the tiles) */
+.leaflet-container { font-family: var(--font-body); background: #E9EEEC; }
+.leaflet-tile-pane { filter: saturate(.45) contrast(.92) brightness(1.06); }
+.leaflet-control-attribution { font-size: 9.5px; }
+
+/* keyframes reused by markers / live dots */
+@keyframes admpulse { 0%, 100% { opacity: 1; } 50% { opacity: .3; } }
+@keyframes sc-fade { from { opacity: 0; transform: translateY(13px); } to { opacity: 1; transform: none; } }
+@keyframes sc-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(126, 208, 194, .5); }
+  70% { box-shadow: 0 0 0 8px rgba(126, 208, 194, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(126, 208, 194, 0); }
+}

@@ -1,0 +1,135 @@
+project:
+  name: Environmental Sensor Forecasting Model
+  version: 1.1.0
+  random_seed: 42
+  timezone_assumption: Europe/Tirane
+  source_time_is_timezone_naive: true
+
+data:
+  timestamp_column: created_at
+  sensor_id_column: indoor_lora_dev_eui
+  resample_frequency: 1h
+  aggregation: median
+  short_gap_interpolation_hours: 2
+  expected_columns: 16
+  source_columns:
+    - id
+    - indoor_lora_dev_eui
+    - indoor_lora_join_eui
+    - indoor_lora_dev_adr
+    - place
+    - description
+    - altitude_m
+    - humidity_pct
+    - pm10_ugm3
+    - pm25_ugm3
+    - pressure_hpa
+    - rain_raw
+    - sound_raw
+    - temperature_c
+    - uv_raw
+    - created_at
+  targets:
+    humidity_pct:
+      label: Relative humidity
+      unit: "%"
+      lower_bound: 1.0
+      upper_bound: 100.0
+    pm10_ugm3:
+      label: PM10
+      unit: "ug/m3"
+      lower_bound: 0.0
+      upper_bound: 1000.0
+    pm25_ugm3:
+      label: PM2.5
+      unit: "ug/m3"
+      lower_bound: 0.0
+      upper_bound: 1000.0
+    pressure_hpa:
+      label: Atmospheric pressure
+      unit: "hPa"
+      lower_bound: 800.0
+      upper_bound: 1100.0
+    rain_raw:
+      label: Rain sensor raw signal
+      unit: "raw 0-1023"
+      lower_bound: 0.0
+      upper_bound: 1023.0
+    sound_raw:
+      label: Sound sensor raw signal
+      unit: "raw 0-1023"
+      lower_bound: 0.0
+      upper_bound: 1023.0
+    temperature_c:
+      label: Air temperature
+      unit: "deg C"
+      lower_bound: -30.0
+      upper_bound: 55.0
+    uv_raw:
+      label: UV sensor raw signal
+      unit: "raw 0-1023"
+      lower_bound: 0.0
+      upper_bound: 1023.0
+
+features:
+  lags_hours: [1, 2, 3, 6, 12, 24, 48, 72, 168]
+  rolling_windows_hours: [3, 6, 12, 24, 72, 168]
+  minimum_lag_values: 2
+  rolling_minimum_divisor: 3
+
+validation:
+  validation_days: 14
+  test_days: 30
+  forecast_horizon_hours: 72
+  validation_origin_count: 4
+  test_origin_count: 5
+  maximum_history_staleness_hours: 24
+
+deployment:
+  forecast_horizon_hours: 72
+  active_sensor_max_age_hours: 48
+  recent_coverage_window_hours: 336
+  minimum_recent_target_coverage: 0.50
+  interval_levels: [0.80, 0.95]
+  minimum_release_rows: 100
+  minimum_80_interval_coverage: 0.70
+  minimum_95_interval_coverage: 0.85
+  maximum_future_clock_skew_hours: 24
+  target_release_overrides:
+    pressure_hpa: "Held-out evidence contains only one sensor and 144 observed rows, pooled R2 is negative, and no pressure series is active at the final origin."
+    rain_raw: "The validation winner reverses on the later held-out test and is materially worse than simple seasonal or persistence references at the final active station; retain for shadow evaluation only."
+    sound_raw: "Every sensor-specific held-out R2 is negative; the active station remains worse than its own mean despite the persistence champion's lower native-unit error."
+    uv_raw: "The validation winner reverses on the later held-out test and is materially worse than the 24-hour seasonal reference at the final active station; retain for shadow evaluation only."
+
+model:
+  loss: absolute_error
+  candidates:
+    hgb_shallow:
+      mode: absolute
+      learning_rate: 0.05
+      max_iter: 180
+      max_leaf_nodes: 15
+      min_samples_leaf: 20
+      l2_regularization: 1.0
+    hgb_balanced:
+      mode: absolute
+      learning_rate: 0.05
+      max_iter: 240
+      max_leaf_nodes: 31
+      min_samples_leaf: 20
+      l2_regularization: 1.5
+    hgb_deep:
+      mode: absolute
+      learning_rate: 0.035
+      max_iter: 300
+      max_leaf_nodes: 63
+      min_samples_leaf: 25
+      l2_regularization: 2.0
+    hgb_residual_balanced:
+      mode: residual_to_seasonal_24h
+      learning_rate: 0.035
+      max_iter: 240
+      max_leaf_nodes: 31
+      min_samples_leaf: 30
+      l2_regularization: 3.0
+  baseline_candidates: [persistence, seasonal_24h, seasonal_blend_24h_168h]

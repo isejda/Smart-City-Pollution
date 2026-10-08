@@ -1,0 +1,122 @@
+/* ============================================================
+   GLOBUS TRAVEL — COLOR TOKENS
+   Two-product brand:
+   • Consumer travel site  → red primary (#B1322F)
+   • Automatic-Bulk admin   → teal-green primary (#08514A)
+   Base palette first, then semantic aliases.
+   ============================================================ */
+
+:root {
+  /* ---- Brand: Red (consumer) ---- */
+  --red-700: #8E2421;
+  --red-600: #9C2B28;
+  --red-500: #B1322F;   /* PRIMARY brand red */
+  --red-400: #C0504D;
+  --red-300: #D98D8B;
+  --red-200: #EFDBDB;
+  --red-100: #F7EDED;   /* selected / tinted surface */
+  --red-50:  #FBF5F5;
+
+  /* ---- Brand: Teal-green (Automatic-Bulk admin) ---- */
+  --teal-700: #06403A;
+  --teal-600: #084641;
+  --teal-500: #08514A;  /* admin primary */
+  --teal-400: #0E6A60;
+  --teal-200: #B7D6D1;
+  --teal-100: #E6F2F0;
+
+  /* ---- Ink / Neutral ramp ---- */
+  --ink-900: #0A0D12;
+  --ink-800: #0F2531;   /* deep navy (hero / footers) */
+  --ink-700: #181D27;   /* primary dark surface + dark buttons */
+  --ink-600: #2A2F3A;
+  --neutral-900: #181D27;
+  --neutral-800: #2E333D;
+  --neutral-700: #454850;
+  --neutral-600: #545861;  /* secondary text */
+  --neutral-500: #72767F;  /* tertiary text */
+  --neutral-400: #979797;
+  --neutral-300: #AFAFAF;
+  --neutral-250: #C7C7C7;
+  --neutral-200: #D8D8D8;
+  --neutral-150: #E8E8E8;
+  --neutral-100: #EEEEEE;  /* hairline borders */
+  --neutral-75:  #F2F2F2;
+  --neutral-50:  #F9F9F9;
+  --neutral-25:  #FAFAFA;  /* app page background */
+  --white: #FFFFFF;
+  --black: #000000;
+
+  /* ---- Semantic status ---- */
+  --amber-500: #F79009;   /* star ratings, warnings */
+  --amber-100: #FEF6E7;
+  --green-600: #1F8A4C;
+  --green-500: #22A65A;
+  --green-100: #F0FDF4;   /* success surface */
+  --blue-500:  #4976F4;   /* info / links accent */
+  --blue-100:  #EAF0FE;
+  --whatsapp:  #25D366;
+
+  /* ============================================================
+     SEMANTIC ALIASES — use these in components
+     ============================================================ */
+
+  /* Brand */
+  --brand: var(--red-500);
+  --brand-hover: var(--red-600);
+  --brand-active: var(--red-700);
+  --brand-surface: var(--red-100);
+  --brand-on: var(--white);
+
+  /* Text */
+  --text-primary: var(--ink-700);
+  --text-secondary: var(--neutral-600);
+  --text-tertiary: var(--neutral-500);
+  --text-disabled: var(--neutral-300);
+  --text-on-brand: var(--white);
+  --text-on-dark: var(--white);
+  --text-link: var(--red-500);
+
+  /* Surfaces */
+  --surface-page: var(--neutral-25);
+  --surface-card: var(--white);
+  --surface-subtle: var(--neutral-50);
+  --surface-muted: var(--neutral-75);
+  --surface-dark: var(--ink-700);
+  --surface-deep: var(--ink-800);
+
+  /* Borders */
+  --border-subtle: var(--neutral-100);
+  --border-default: var(--neutral-150);
+  --border-strong: var(--neutral-200);
+  --border-focus: var(--ink-700);
+
+  /* Actions */
+  --action-primary: var(--ink-700);          /* dark "View Offer" buttons */
+  --action-primary-hover: var(--ink-900);
+  --action-on-primary: var(--white);
+  --action-accent: var(--red-500);            /* red "Explore / Confirm" */
+  --action-accent-hover: var(--red-600);
+
+  /* Ratings / status */
+  --rating-star: var(--amber-500);
+  --score-bg: var(--red-500);
+  --success: var(--green-500);
+  --success-surface: var(--green-100);
+  --warning: var(--amber-500);
+  --info: var(--blue-500);
+  --danger: var(--red-500);
+}
+
+/* ---- Admin (Automatic-Bulk) theme scope ----
+   Add class="theme-admin" to a subtree to swap the brand to teal-green. */
+.theme-admin {
+  --brand: var(--teal-500);
+  --brand-hover: var(--teal-600);
+  --brand-active: var(--teal-700);
+  --brand-surface: var(--teal-100);
+  --action-accent: var(--teal-500);
+  --action-accent-hover: var(--teal-600);
+  --text-link: var(--teal-500);
+  --surface-dark: var(--ink-900);
+}
